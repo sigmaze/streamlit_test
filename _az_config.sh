@@ -35,6 +35,10 @@ az account set --subscription "${SUBSCRIPTION}" || echo "Login first" || exit 1
 rm -f app.zip
 zip -r app.zip Data requirements.txt run_app.py
 az webapp config set  --resource-group $RESOURCEGROUP --name $SITENAME --startup-file "streamlit run --server.port 8000 run_app.py" 
+## didn't work
+# az webapp config set  --resource-group $RESOURCEGROUP --name $SITENAME --startup-file "streamlit run --server.port 8501 --server.address=0.0.0.0 run_app.py" 
+# "--server.port=8501", "--server.address=0.0.0.0"
+
 az webapp config appsettings set --resource-group $RESOURCEGROUP --name $SITENAME --settings SCM_DO_BUILD_DURING_DEPLOYMENT=true
 az webapp deploy --resource-group $RESOURCEGROUP --type zip --name $SITENAME --src-path app.zip
 # the previous command returned the git remote to deploy to
@@ -45,3 +49,6 @@ az webapp deploy --resource-group $RESOURCEGROUP --type zip --name $SITENAME --s
 
 # browse to the site
 # az webapp browse --name $SITENAME --resource-group $RESOURCEGROUP
+
+
+# curl --fail http://localhost:8000/_stcore/health
